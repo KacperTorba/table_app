@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <!-- Block title -->
+    {% block title_icon %}
+
+    <title>Homepage</title>
+    <link rel="icon" href='#'>
+
+    {% endblock %}
+
+  </head>
+
+  <header class="p-3 text-bg-dark sticky-top">
+    <div class="container">      
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">        
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="{{url_for('home')}}" class="nav-link px-2 text-secondary">Home</a></li>
+          <li><a href="{{url_for('docs')}}" class="nav-link px-2 text-white">Docs</a></li>   
+          
+          {% if current_user.is_authenticated and current_user.is_admin %}
+  
+          <li><a href="{{url_for('dashboard')}}" class="nav-link px-2 text-white">ADD/EDIT users</a></li>
+
+            {% endif %}
+          </li>
+          
+        </ul>
+        
+  
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+          <input type="search" class="form-control form-control-dark " placeholder="Search..." >
+        </form>
+  
+        <div class="text-end">
+          {% if not current_user.is_authenticated %}
+          <a button type="button" href="{{url_for('login')}}" class="btn btn-outline-light me-2">Sign in</button></a>
+          <a button type="button" href="{{url_for('registration')}}" class="btn btn-warning">Sign up</button></a>
+          {% endif %}
+          {% if current_user.is_authenticated %}
+          <a button type="button" href="{{url_for('logout')}}" class="btn btn-outline-danger me-0 btn-sm">Logout: {{current_user.first_name}}</button></a>
+          {% endif %}
+          
+        </div>
+      </div>
+    </div>
+    
+      
+    
+  
+  </header>
+
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+<strong>{{ message }}</strong> 
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+{% if current_user.is_authenticated and current_user.confirmed != True %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Please confirm your e-mail! </strong>
+  <a href="{{ url_for('new_token', email = current_user.mail)}}" class="btn btn-sm btn-danger">Send new token</a>
+  </div>
+{% endif %}
+
+<body>
+<!-- Body content -->
+
+{% block body_content %}
+
+{% endblock %}
+ 
+
+<!-- Optional JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">  
+</script>
+</body>
+</html>
